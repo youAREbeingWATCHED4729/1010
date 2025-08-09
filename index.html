@@ -1,0 +1,178 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JFC-IT Scavenger Hunt</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: black;
+    font-family: 'Courier New', monospace;
+    color: #00ff66;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+
+  .letter {
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #00ff66;
+    box-shadow: 0 0 20px #00ff66;
+    width: 90%;
+    max-width: 600px;
+    padding: 5vw;
+    animation: fadeIn 1s ease-in-out;
+    cursor: pointer;
+  }
+
+  .typewriter {
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    border-right: .15em solid #00ff66;
+    animation: typing 5s steps(60, end), blink-caret 0.75s step-end infinite;
+    font-size: clamp(14px, 2.5vw, 18px);
+    line-height: 1.5;
+  }
+
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+
+  @keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: #00ff66; }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h1 {
+    text-align: center;
+    color: #00ff66;
+    text-shadow: 0 0 5px #00ff66, 0 0 10px #00ff66;
+    font-size: clamp(20px, 5vw, 28px);
+    margin-bottom: 10px;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .back-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 8px 15px;
+    border: 1px solid #00ff66;
+    color: #00ff66;
+    background: transparent;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .back-btn:hover {
+    background: #00ff66;
+    color: black;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<!-- First Box -->
+<div class="letter" id="box1">
+  <p class="typewriter">
+greetings. 
+
+we are sEEking sharp minds who can read what others overloOk. if you can untangle codes and uncover hidden meanings, the first challenge awaits. decipher what sleePs beneath the noise, follow each thRead to its end. for the first to arrIVe, the reward will be counted in four sileNt digits.
+
+in this message lies your first clue.
+
+good luck.
+4279
+  </p>
+</div>
+
+<!-- Second Box -->
+<div class="letter hidden" id="box2">
+  <p><a href="https://www.facebook.com/TatakSJCQC/" target="_blank" style="color:#00ccff;">Whisper your answer where our blue seal dwells.</a></p>
+  <button class="back-btn" id="backBtn">Go Back</button>
+</div>
+
+<script>
+/* Matrix Falling Code Effect */
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+}
+resizeCanvas();
+
+const letters = 'アァイィウヴエェオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモヤャユュヨョラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const matrix = letters.split('');
+
+let fontSize = 14;
+let columns = canvas.width / fontSize;
+let drops = Array.from({ length: columns }).fill(1);
+
+function draw() {
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#00ff66';
+  ctx.font = fontSize + 'px monospace';
+
+  for (let i = 0; i < drops.length; i++) {
+    const text = matrix[Math.floor(Math.random() * matrix.length)];
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+      drops[i] = 0;
+    }
+    drops[i]++;
+  }
+}
+setInterval(draw, 33);
+
+window.addEventListener('resize', () => {
+    resizeCanvas();
+    columns = canvas.width / fontSize;
+    drops = Array.from({ length: columns }).fill(1);
+});
+
+/* Box switching */
+const box1 = document.getElementById('box1');
+const box2 = document.getElementById('box2');
+const backBtn = document.getElementById('backBtn');
+
+box1.addEventListener('click', () => {
+    box1.classList.add('hidden');
+    box2.classList.remove('hidden');
+});
+
+backBtn.addEventListener('click', () => {
+    box2.classList.add('hidden');
+    box1.classList.remove('hidden');
+});
+</script>
+
+</body>
+</html>
