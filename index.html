@@ -29,66 +29,49 @@
   .letter {
     background: rgba(0, 0, 0, 0.7);
     border: 2px solid #00ff66;
-    box-shadow: 0 0 20px #00ff66;
-    width: 90%;
-    max-width: 600px;
+    box-shadow: 0 0 15px #00ff66;
+    width: 85%;
+    max-width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
     padding: 5vw;
     animation: fadeIn 1s ease-in-out;
-    cursor: pointer;
   }
 
-  .typewriter {
-    overflow: hidden;
+  .typewriter-line {
+    display: block;
     white-space: pre-wrap;
     word-wrap: break-word;
-    border-right: .15em solid #00ff66;
-    animation: typing 5s steps(60, end), blink-caret 0.75s step-end infinite;
     font-size: clamp(14px, 2.5vw, 18px);
     line-height: 1.5;
-  }
-
-  @keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
-  }
-
-  @keyframes blink-caret {
-    from, to { border-color: transparent }
-    50% { border-color: #00ff66; }
+    margin: 14px 0;
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(50px); }
+    from { opacity: 0; transform: translateY(40px); }
     to { opacity: 1; transform: translateY(0); }
-  }
-
-  h1 {
-    text-align: center;
-    color: #00ff66;
-    text-shadow: 0 0 5px #00ff66, 0 0 10px #00ff66;
-    font-size: clamp(20px, 5vw, 28px);
-    margin-bottom: 10px;
   }
 
   .hidden {
     display: none;
   }
 
-  .back-btn {
-    display: inline-block;
+  .continue-link, .back-btn {
+    display: block;
     margin-top: 15px;
-    padding: 8px 15px;
-    border: 1px solid #00ff66;
-    color: #00ff66;
-    background: transparent;
-    text-decoration: none;
+    font-size: clamp(16px, 3vw, 20px);
+    color: blue;
+    text-decoration: underline;
     cursor: pointer;
-    transition: background 0.3s;
+    background: transparent;
+    border: none;
+    opacity: 0;
+    transition: opacity 1s ease-in;
+    font-family: 'Courier New', monospace;
   }
 
-  .back-btn:hover {
-    background: #00ff66;
-    color: black;
+  .continue-link.show, .back-btn.show {
+    opacity: 1;
   }
 </style>
 </head>
@@ -98,26 +81,27 @@
 
 <!-- First Box -->
 <div class="letter" id="box1">
-  <p class="typewriter">
-greetings. 
+  <span class="typewriter-line" data-text="Greetings."></span>
+  <span class="typewriter-line" data-text="Few have the EYEs to SEE, fewer have the will to follow. WHAT we are looking for are not the curious. We are looking for the relentless. To find them, we have devised a test."></span>
+  <span class="typewriter-line" data-text="There is a clue hidden in this message."></span>
+  <span class="typewriter-line" data-text="Find it and you will find us."></span>
+  <span class="typewriter-line" data-text="Only the first to arrive will be remembered. There is no place for OTHERS. No consolation. The path ends for all but one."></span>
+  <span class="typewriter-line" data-text="For the one/group who CAN complete the path, Php 1,000 will change hands — crisp, counted, and enough to buy what hunger or habit demands."></span>
+  <span class="typewriter-line" data-text="Do NOT share what you find."></span>
+  <span class="typewriter-line" data-text="Pull the thread."></span>
+  <span class="typewriter-line" data-text="Watch the fabric tear."></span>
 
-we are sEEking sharp minds who can read what others overloOk. if you can untangle codes and uncover hidden meanings, the first challenge awaits. decipher what sleePs beneath the noise, follow each thRead to its end. for the first to arrIVe, the reward will be counted in four sileNt digits.
-
-in this message lies your first clue.
-
-good luck.
-4279
-  </p>
+ <span class="continue-link hidden" id="continueLink">Continue</span>
 </div>
 
 <!-- Second Box -->
 <div class="letter hidden" id="box2">
-  <p><a href="https://www.facebook.com/TatakSJCQC/" target="_blank" style="color:#00ccff;">Whisper your answer where our blue seal dwells.</a></p>
-  <button class="back-btn" id="backBtn">Go Back</button>
+  <p><a href="protected_message.pdf" target="_blank" style="color:#ff6600;">I wait in silence, yet I lead the way. Unveil me, and the path obey.</a></p>
+  <button class="back-btn hidden" id="backBtn">Go Back</button>
 </div>
 
 <script>
-/* Matrix Falling Code Effect */
+/* Binary Rain Background with random green shades */
 const canvas = document.getElementById('matrix');
 const ctx = canvas.getContext('2d');
 
@@ -127,21 +111,26 @@ function resizeCanvas() {
 }
 resizeCanvas();
 
-const letters = 'アァイィウヴエェオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモヤャユュヨョラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const letters = '01';
 const matrix = letters.split('');
 
 let fontSize = 14;
 let columns = canvas.width / fontSize;
 let drops = Array.from({ length: columns }).fill(1);
 
+function randomGreen() {
+  let g = Math.floor(128 + Math.random() * 127); 
+  return `rgb(0, ${g}, 0)`;
+}
+
 function draw() {
   ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#00ff66';
   ctx.font = fontSize + 'px monospace';
 
   for (let i = 0; i < drops.length; i++) {
     const text = matrix[Math.floor(Math.random() * matrix.length)];
+    ctx.fillStyle = randomGreen();
     ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
     if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
@@ -158,19 +147,55 @@ window.addEventListener('resize', () => {
     drops = Array.from({ length: columns }).fill(1);
 });
 
+/* Typewriter effect per line */
+const lines = document.querySelectorAll('.typewriter-line');
+const continueLink = document.getElementById('continueLink');
+const backBtn = document.getElementById('backBtn');
+
+let lineIndex = 0;
+function typeLine() {
+  if (lineIndex >= lines.length) {
+    // show continue ONLY after last line is fully typed
+    continueLink.classList.remove("hidden");
+    setTimeout(() => continueLink.classList.add("show"), 100);
+    return;
+  }
+  let el = lines[lineIndex];
+  let text = el.getAttribute("data-text");
+  let i = 0;
+  let interval = setInterval(() => {
+    el.textContent = text.slice(0, i);
+    i++;
+    if (i > text.length) {
+      clearInterval(interval);
+      lineIndex++;
+      setTimeout(typeLine, 60); // faster sentence transition
+    }
+  }, 8); // ultra fast typing per char
+}
+typeLine();
+
 /* Box switching */
 const box1 = document.getElementById('box1');
 const box2 = document.getElementById('box2');
-const backBtn = document.getElementById('backBtn');
 
-box1.addEventListener('click', () => {
+continueLink.addEventListener('click', () => {
     box1.classList.add('hidden');
     box2.classList.remove('hidden');
+    backBtn.classList.remove("hidden");
+    setTimeout(() => backBtn.classList.add("show"), 100);
 });
 
 backBtn.addEventListener('click', () => {
     box2.classList.add('hidden');
     box1.classList.remove('hidden');
+    lines.forEach(el => el.textContent = "");
+    lineIndex = 0;
+    continueLink.classList.add("hidden");
+    continueLink.classList.remove("show");
+    backBtn.classList.add("hidden");
+    backBtn.classList.remove("show");
+    typeLine();
 });
 </script>
 
